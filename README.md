@@ -112,11 +112,14 @@ En las carpetas creadas anteriormente, cree una página HTML index.html y guarde
 
 
 La cual pide una imagen llamada logo.png. Acceda a la página web desde el navegador Lynx y verifique que la página y la imagen se muestran correctamente.
-Normalmente, por defecto los servidores web buscan un fichero llamado index.html para mostrarlo cuando se accede a una carpeta. Por ello, al acceder a la raíz del servidor (http://localhost/) se mostrará la página index.html creada anteriormente. Por ello, guarde este fichero como index.html.
-Compruebe que la página se muestra correctamente accediendo a la URL http://localhost/.
+
+De forma predeterminada los servidores web buscan un fichero llamado index.html para mostrarlo cuando se accede a una carpeta. Por lo cual al acceder a la raíz del servidor (http://localhost/) se mostrará la página index.html creada anteriormente. En concordancia con aquello es necesario que guarde este fichero como index.html.
+Finalmente, compruebe que la página se muestra correctamente accediendo a la URL http://localhost/.
 
 Hasta ahora, sólo hemos comprobado la configuración y funcionamiento del servidor, accediendo a su contenido desde la propia máquina donde se ejecuta. Sin embargo, el objetivo es lograr comunicación desde una máquina que ejecute un proceso cliente de forma remota.
-En una primera prueba, se van a emplear las direcciones de red para acceder al contenido. Para ello, basta con iniciar cualquier navegador web en el host y escribir en la barra de direcciones la dirección de red con la que hemos configurado la máquina servidor. Deberemos ver la misma página que nos mostró el navegador lynx. No obstante, conocer la dirección de red de la máquina donde se encuentra el servidor no es común, y los usuarios suelen emplear nombres lógicos para acceder a las páginas web (del tipo www.dominio.es). Para poder implementar esta funcionalidad en el escenario de la práctica se deben realizar las siguientes configuraciones. Primero, se debe indicar el nombre escogido en el servidor (no es imprescindible, pero sí recomendable). Para ello habría que modificar el archivo de configuración. Añada la siguiente línea dentro del bloque server del fichero nginx.conf:
+En una primera prueba, se van a emplear las direcciones de red para acceder al contenido. Para ello, basta con iniciar cualquier navegador web en el host y escribir en la barra de direcciones la dirección de red con la que hemos configurado la máquina servidor. Deberemos ver la misma página que nos mostró el navegador lynx. No obstante, conocer la dirección de red de la máquina donde se encuentra el servidor no es común y los usuarios suelen emplear nombres lógicos para acceder a las páginas web (del tipo www.dominio.es). 
+
+Para poder implementar esta funcionalidad en el escenario de la práctica se deben realizar las siguientes configuraciones. Primero, se debe indicar el nombre escogido en el servidor (no es imprescindible, pero sí recomendable). Para ello habría que modificar el archivo de configuración. Añada la siguiente línea dentro del bloque server del fichero nginx.conf:
 
 ```cfg
 server_name dominio1 www.dominio1.cdps;
