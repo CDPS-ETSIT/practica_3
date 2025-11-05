@@ -20,7 +20,25 @@ El objetivo de esta práctica es aprender a instalar y configurar un servicio, e
 - Ver los pasos de instalación.
 - Construir un script que los automatice.
 
-Para el arranque usar la práctica anterior. Una vez hemos arrancado el escenario, y hemos comprobado que existe conectividad entre ambas máquinas se procede a instalar un servidor NGINX en la máquina virtual. Para poder verificarlo desde la consola de comandos usaremos un navegador textual LYNX2. A pesar de su limitada funcionalidad es de gran utilidad. Asimismo, instalaremos una herramienta de descarga de webs que nos permitirá verificar si una página web existe WGET (aunque también se puede utilizar CURL)
+
+
+## Implementación del escenario de máquinas virtuales
+Para el arranque usar la práctica anterior.  Se va a implementar la infraestructura de la empresa usando una máquina física donde se podrán ejecutar máquinas virtuales que contendrán los servidores.
+
+Para poder desarrollar la práctica, se debe disponer de dos máquinas: la máquina que ejecutará el proceso servidor, y la máquina que actuará como cliente. 
+
+Con el objetivo de reducir el peso del escenario, y facilitar la ejecución de la práctica, sólo la máquina que ejecute el servidor va a ser de tipo virtual. 
+Como máquina cliente se empleará la máquina anfitriona (el propio puesto del laboratorio).
+
+![escenario.jpg](img/scenario.jpg)
+
+
+La configuración del escenario puede verse en la imagen anterior. Para conseguir arrancar dicho escenario, la configuración de la biblioteca libvirt de los puestos del laboratorio se ha modificado para que el rango de direcciones de red entre la IP 192.168.122.201 y la IP 192.168.122.254 no sea manejado por el servidor DHCP de la biblioteca, sino que quede libre para asignar las direcciones de forma estática.
+Se debe, entonces, arrancar una máquina virtual en la que se pueda disponer de permisos de superusuario, que hará las veces de servidor, y a la que debemos asignarle de forma estática la dirección de red indicada en la figura. Para ello, en primer lugar, se debe seguir el mismo proceso que se empleó en el primer apartado de la práctica 1. 
+
+## Instalación de los servicios
+
+Una vez hemos arrancado el escenario, y hemos comprobado que existe conectividad entre ambas máquinas se procede a instalar un servidor NGINX en la máquina virtual. Para poder verificarlo desde la consola de comandos usaremos un navegador textual LYNX2. A pesar de su limitada funcionalidad es de gran utilidad. Asimismo, instalaremos una herramienta de descarga de webs que nos permitirá verificar si una página web existe WGET (aunque también se puede utilizar CURL)
 
 ```bash
 sudo apt-get update
