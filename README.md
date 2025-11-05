@@ -142,6 +142,7 @@ mkdir /tmp/dom2
 
 Ahora, dentro de cada directorio, se debe crear una página HTML index.html que identifique a cada uno de los servidores virtuales. Por ejemplo, añada a cada página el nombre del servidor que la sirve: Se repite el proceso para el segundo dominio, pero cambiando su correspondiente index.html para que tenga otro contenido.
 Para modificar la configuración del servidor NGINX y añadir el segundo servidor, se añade un segundo bloque server al fichero de configuración nginx.conf. Se debe modificar el server_name y la localización de los ficheros para que apunten al directorio correspondiente.
+
 Finalmente, se debe cargar el nuevo fichero de configuración en el servidor, y activar los cambios: Una vez finalizado este proceso, han quedado habilitados dos servidores virtuales. Para terminar, solo queda comprobar que ambos dominios son accesibles desde el cliente y que el contenido devuelto por el servidor es el apropiado en cada caso.
 
 ## Realización de un script que automatice la configuración e instalación de los servicios.
