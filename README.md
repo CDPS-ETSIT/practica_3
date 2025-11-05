@@ -30,7 +30,7 @@ Para poder desarrollar la práctica, se debe disponer de dos máquinas: la máqu
 Con el objetivo de reducir el peso del escenario, y facilitar la ejecución de la práctica, sólo la máquina que ejecute el servidor va a ser de tipo virtual. 
 Como máquina cliente se empleará la máquina anfitriona (el propio puesto del laboratorio).
 
-![escenario.jpg](img/scenario.jpg)
+![escenario.jpg](img/escenario.jpg)
 
 
 La configuración del escenario puede verse en la imagen anterior. Para conseguir arrancar dicho escenario, la configuración de la biblioteca libvirt de los puestos del laboratorio se ha modificado para que el rango de direcciones de red entre la IP 192.168.122.201 y la IP 192.168.122.254 no sea manejado por el servidor DHCP de la biblioteca, sino que quede libre para asignar las direcciones de forma estática.
