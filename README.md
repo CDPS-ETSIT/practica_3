@@ -33,7 +33,7 @@ Como máquina cliente se empleará la máquina anfitriona (el propio puesto del 
 ![escenario.jpg](img/escenario.jpg)
 
 
-La configuración del escenario puede verse en la imagen anterior. Para conseguir arrancar dicho escenario, la configuración de la biblioteca libvirt de los puestos del laboratorio se ha modificado para que el rango de direcciones de red entre la IP 192.168.122.201 y la IP 192.168.122.254 no sea manejado por el servidor DHCP de la biblioteca, sino que quede libre para asignar las direcciones de forma estática.
+La configuración del escenario puede verse en la imagen anterior. Para conseguir arrancar dicho escenario, la configuración de la biblioteca libvirt de los puestos del laboratorio se ha modificado para que el rango de direcciones de red entre la IP `192.168.122.201` y la IP `192.168.122.254` no sea manejado por el servidor DHCP de la biblioteca, sino que quede libre para asignar las direcciones de forma estática.
 Se debe, entonces, arrancar una máquina virtual en la que se pueda disponer de permisos de superusuario, que hará las veces de servidor, y a la que debemos asignarle de forma estática la dirección de red indicada en la figura. Para ello, en primer lugar, se debe seguir el mismo proceso que se empleó en el primer apartado de la práctica 1. 
 
 ## Instalación de los servicios
@@ -166,7 +166,7 @@ Finalmente, se debe cargar el nuevo fichero de configuración en el servidor, y 
 ## Realización de un script que automatice la configuración e instalación de los servicios.
 Realizaremos dos scripts de python :
 
-- Install.py : Instalará en una máquina el servidor NGING y realiza la configuración inicial
+- Install.py : Instalará en una máquina el servidor NGINX y realiza la configuración inicial
 
 - Addwebhost.py : Añadirá una nueva web, admitiendo el nombre de dicha web como parámetro.
 
