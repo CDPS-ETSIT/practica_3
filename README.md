@@ -30,12 +30,12 @@ sudo apt install nginx
 sudo nginx
 ```
 
-Para la realización posterior de los scripts es necesario recordar que la ejecución de los comandos unix devuelven el resultado de la operación (si ha concluido con éxito o no). Esto se podrá utilizar como condición dentro de un script. Una vez instaladas las herramientas, podemos comprobar que el servidor NGING está listo mediante:
+Para la realización posterior de los scripts es necesario recordar que la ejecución de los comandos unix devuelven el resultado de la operación (si ha concluido con éxito o no). Esto se podrá utilizar como condición dentro de un script. Una vez instaladas las herramientas, podemos comprobar que el servidor NGINX está listo mediante:
 ```bash
 lynx http://localhost
 ```
 
-Una vez se ha comprobado que el servidor está en funcionamiento, es importante familiarizarse con los directorios y ficheros que controlan su funcionamiento. Dos localizaciones en el sistema de ficheros son importantes para el servidor NGING.
+Una vez se ha comprobado que el servidor está en funcionamiento, es importante familiarizarse con los directorios y ficheros que controlan su funcionamiento. Dos localizaciones en el sistema de ficheros son importantes para el servidor NGINX.
 
 Dependiendo de la instalación, los ficheros se encuentran en /usr/local/nginx/conf, /etc/nginx, o /usr/local/etc/nginx. Busque en que carpeta se encuentran sus ficheros con el comando ls. Por ahora, sólo es de nuestro interés el fichero nginx.conf. Analice su contenido haciendo uso de un editor.
 ```bash
@@ -65,9 +65,9 @@ mkdir /tmp/www
 mkdir /tmp/images
 ```
 
-La documentación para configurar el servidor NGING puede encontrarse en la web oficial del proyecto https://nginx.org/en/docs/. En concreto, para configurar un servidor web estático, es necesario modificar el fichero de configuración nginx.conf.
+La documentación para configurar el servidor NGINX puede encontrarse en la web oficial del proyecto https://nginx.org/en/docs/. En concreto, para configurar un servidor web estático, es necesario modificar el fichero de configuración nginx.conf.
 
-Para ello, editar el fichero nginx.conf y sustituir el contenido por el siguiente:
+Editar el fichero nginx.conf y sustituir el contenido por el siguiente:
 ```
 events {}
 http {
