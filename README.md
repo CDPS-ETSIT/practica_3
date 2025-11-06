@@ -25,16 +25,17 @@ El objetivo de esta práctica es aprender a instalar y configurar un servicio, e
 ## Implementación del escenario de máquinas virtuales
 Para el arranque usar la práctica anterior.  Se va a implementar la infraestructura de la empresa usando una máquina física donde se podrán ejecutar máquinas virtuales que contendrán los servidores.
 
-Para poder desarrollar la práctica, se debe disponer de dos máquinas: la máquina que ejecutará el proceso servidor, y la máquina que actuará como cliente. 
+Para poder desarrollar la práctica, se debe disponer de dos máquinas: la máquina que ejecutará el proceso servidor, y la máquina que actuará como cliente.
 
-Con el objetivo de reducir el peso del escenario, y facilitar la ejecución de la práctica, sólo la máquina que ejecute el servidor va a ser de tipo virtual. 
+Con el objetivo de reducir el peso del escenario, y facilitar la ejecución de la práctica, sólo la máquina que ejecute el servidor va a ser de tipo virtual.
 Como máquina cliente se empleará la máquina anfitriona (el propio puesto del laboratorio).
 
 ![escenario.jpg](img/escenario.jpg)
 
 
-La configuración del escenario puede verse en la imagen anterior. Para conseguir arrancar dicho escenario, la configuración de la biblioteca libvirt de los puestos del laboratorio se ha modificado para que el rango de direcciones de red entre la IP `192.168.122.201` y la IP `192.168.122.254` no sea manejado por el servidor DHCP de la biblioteca, sino que quede libre para asignar las direcciones de forma estática.
-Se debe, entonces, arrancar una máquina virtual en la que se pueda disponer de permisos de superusuario, que hará las veces de servidor, y a la que debemos asignarle de forma estática la dirección de red indicada en la figura. Para ello, en primer lugar, se debe seguir el mismo proceso que se empleó en el primer apartado de la práctica 1. 
+La configuración del escenario puede verse en la imagen anterior.
+Se debe, entonces, arrancar una máquina virtual en la que se pueda disponer de permisos de superusuario, que hará de servidor. Para ello, en primer lugar, se debe seguir el mismo proceso que se empleó en el primer apartado de la práctica 1.
+No es necesario crear los bridges de la práctica 1, la máquina virtual deberá estar conectado al bridge virtbr0 para tener conectividad con la máquina anfitriona.
 
 ## Instalación de los servicios
 
@@ -52,7 +53,6 @@ gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/sh
 echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg]  http://nginx.org/packages/ubuntu `lsb_release -cs` nginx"  | sudo tee /etc/apt/sources.list.d/nginx.list
 sudo apt update
 sudo apt install nginx
-sudo nginx
 ```
 
 Para la realización posterior de los scripts es necesario recordar que la ejecución de los comandos unix devuelven el resultado de la operación (si ha concluido con éxito o no). Esto se podrá utilizar como condición dentro de un script. Una vez instaladas las herramientas, podemos comprobar que el servidor NGINX está listo mediante:
@@ -63,14 +63,30 @@ lynx http://localhost
 Una vez se ha comprobado que el servidor está en funcionamiento, es importante familiarizarse con los directorios y ficheros que controlan su funcionamiento. Dos localizaciones en el sistema de ficheros son importantes para el servidor NGINX.
 
 Dependiendo de la instalación, los ficheros se encuentran en /usr/local/nginx/conf, /etc/nginx, o /usr/local/etc/nginx. Busque en que carpeta se encuentran sus ficheros con el comando ls. Por ahora, sólo es de nuestro interés el fichero nginx.conf. Analice su contenido haciendo uso de un editor.
+
 ```bash
 sudo vi /etc/nginx/nginx.conf
-sudo nano /etc/nginx/nginx.conf
 ```
 
-Arrancar, detener y reiniciar el servidor
+## Arrancar, detener y reiniciar el servidor
 
-Para arrancar, detener o reiniciar el servidor se emplean los siguientes comandos:
+Para arrancar el servidor NGINX se emplea el siguiente comando:
+```bash
+sudo nginx
+```
+
+Si existe algun proceso arrancado en el puerto 80, el servidor NGINX no podrá arrancar.
+Si tiene el servidor Apache arrancado, deberá detenerlo antes de arrancar NGINX:
+```bash
+sudo systemctl stop apache2
+```
+
+Una vez arrancado el servidor, puede comprobar que está funcionando correctamente accediendo a la URL http://localhost desde el navegador Lynx:
+```bash
+lynx http://localhost
+```
+
+Para detener o reiniciar el servidor se emplean los siguientes comandos:
 ```bash
 sudo nginx -s SIGNAL
 ```
@@ -102,17 +118,16 @@ http {
 }
 ```
 
-
 Este fichero arranca un servidor web que escucha en el puerto 80. Para servir los ficheros es necesario añadir la localización de los mismos. Añada las siguientes líneas dentro del bloque server:
 
 
 ```cfg
 location / {
-    root   /temp/www;
+    root   /tmp/www;
 }
 
 location /images/ {
-    root   /temp;
+    root   /tmp;
 }
 ```
 
@@ -124,18 +139,25 @@ En las carpetas creadas anteriormente, cree una página HTML index.html y guarde
 ```html
 <html>
     <h1>Servidor funcionando</h1>
-    <img src="/images/logo.png" alt="Si ves esto no encuentra el logo">
+    <img src="/images/logo.png" alt="Si ves esto no hay logo o estas en nginx">
 </html>
 ```
 
 
-La cual pide una imagen llamada logo.png. Acceda a la página web desde el navegador Lynx y verifique que la página y la imagen se muestran correctamente.
+La cual pide una imagen llamada logo.png. Acceda a la página web desde el navegador Lynx y verifique que la página se muestra correctamente.
+Para añdir la imagen logo.png puede descargar cualquier imagen y guardarla con dicho nombre en la carpeta /tmp/images.
+Para copiar una imagen desde la máquina anfitriona a la máquina virtual puede usar el comando scp (secure copy). Desde la máquina anfitriona ejecute el siguiente comando:
+
+```bash
+scp ruta_local_de_la_imagen usuario@ip_maquina_virtual:/tmp/images/logo.png
+```
+La imagen no se muestra en el navegador Lynx, al ser un navegador textual. Sin embargo se debería ver si accede desde el navegador.
 
 De forma predeterminada los servidores web buscan un fichero llamado index.html para mostrarlo cuando se accede a una carpeta. Por lo cual al acceder a la raíz del servidor (http://localhost/) se mostrará la página index.html creada anteriormente. En concordancia con aquello es necesario que guarde este fichero como index.html.
 Finalmente, compruebe que la página se muestra correctamente accediendo a la URL http://localhost/.
 
 Hasta ahora, sólo hemos comprobado la configuración y funcionamiento del servidor, accediendo a su contenido desde la propia máquina donde se ejecuta. Sin embargo, el objetivo es lograr comunicación desde una máquina que ejecute un proceso cliente de forma remota.
-En una primera prueba, se van a emplear las direcciones de red para acceder al contenido. Para ello, basta con iniciar cualquier navegador web en el host y escribir en la barra de direcciones la dirección de red con la que hemos configurado la máquina servidor. Deberemos ver la misma página que nos mostró el navegador lynx. No obstante, conocer la dirección de red de la máquina donde se encuentra el servidor no es común y los usuarios suelen emplear nombres lógicos para acceder a las páginas web (del tipo www.dominio.es). 
+En una primera prueba, se van a emplear las direcciones de red para acceder al contenido. Para ello, basta con iniciar cualquier navegador web en el host y escribir en la barra de direcciones la dirección de red con la que hemos configurado la máquina servidor. Deberemos ver la misma página que nos mostró el navegador lynx. No obstante, conocer la dirección de red de la máquina donde se encuentra el servidor no es común y los usuarios suelen emplear nombres lógicos para acceder a las páginas web (del tipo www.dominio.es).
 
 Para poder implementar esta funcionalidad en el escenario de la práctica se deben realizar las siguientes configuraciones. Primero, se debe indicar el nombre escogido en el servidor (no es imprescindible, pero sí recomendable). Para ello habría que modificar el archivo de configuración. Añada la siguiente línea dentro del bloque server del fichero nginx.conf:
 
@@ -144,7 +166,9 @@ server_name dominio1 www.dominio1.cdps;
 ```
 
 
-Tras esto, el servidor ya tiene asociado un nombre lógico. En condiciones normales, para poder acceder al servidor por su nombre lógico desde el cliente (como hemos visto), sería preciso dar de alta una correspondencia en el DNS. Sin embargo, puesto que las direcciones de red que manejamos no son públicas, y no somos dueños de los dominios empleados, no es posible utilizar este servicio. Como alternativa, tenéis que modificar el archivo /etc/hosts, que almacena algunas correspondencias de forma local en el cliente, en todos los puestos del laboratorio. En concreto, se han de añadir las siguientes dos correspondencias:
+Tras esto, el servidor ya tiene asociado un nombre lógico. En condiciones normales, para poder acceder al servidor por su nombre lógico desde el cliente (como hemos visto), sería preciso dar de alta una correspondencia en el DNS. Sin embargo, puesto que las direcciones de red que manejamos no son públicas, y no somos dueños de los dominios empleados, no es posible utilizar este servicio. Como alternativa, tenéis que modificar el archivo /etc/hosts, que almacena algunas correspondencias de forma local en el cliente.
+Sin embargo, al no disponer de permisos de superusuario en los puestos del laboratorio, no es posible modificar dicho fichero. Por tanto, modificaremos el fichero hosts de la máquina virtual servidor para que resuelva las direcciones. Desde la máquina virtual podrá acceder al servidor web usando el nombre lógico.
+Para ello, edite el fichero /etc/hosts y añada las siguientes líneas al final del fichero:
 
 ```cfg
 192.168.122.241 dominio1 www.dominio1.cdps
@@ -174,8 +198,8 @@ En un apéndice se incluyen algunos códigos de python para operaciones de manip
 
 ## Entrega
 
-- Las prácticas de la asignatura se harán por parejas. Deberán entregar un fichero zip que contiene :
-- Un fichero pareja.txt con los nombres de los integrantes de
+Las prácticas de la asignatura se harán por parejas. Deberán entregar un fichero zip que contiene :
+- Un fichero grupo.txt con los nombres de los integrantes.
 - Capturas de la realización de la configuración de forma manual.
 - Ficheros de configuración pedidos.
 
